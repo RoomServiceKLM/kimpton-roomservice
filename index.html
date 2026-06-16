@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kimpton – Room Service</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Open+Sans:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #FFF8E7;
+            color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1a1a1a;
+            padding: 35px 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: #E5A632;
+        }
+
+        .logo {
+            width: 160px;
+            height: auto;
+            margin-bottom: 18px;
+        }
+
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #fff;
+            font-weight: 400;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #E5A632;
+            margin-top: 10px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .body {
+            padding: 30px 25px;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #E5A632;
+            margin-bottom: 12px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .label-note {
+            font-size: 12px;
+            color: #888;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #F0D78C;
+            border-radius: 6px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 15px;
+            color: #2c2c2c;
+            background: #FFFDF5;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #E5A632;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(229, 166, 50, 0.15);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 12 12'%3E%3Cpath fill='%23E5A632' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: none;
+            height: 90px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .option-card {
+            border: 1.5px solid #F0D78C;
+            border-radius: 8px;
+            padding: 16px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: #fff;
+            position: relative;
+        }
+
+        .option-card:hover {
+            border-color: #E5A632;
+            background: #FFF8E7;
+        }
+
+        .option-card.selected {
+            border-color: #E5A632;
+            background: #FFF8E7;
+            box-shadow: 0 0 0 2px rgba(229, 166, 50, 0.2);
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            background: #E5A632;
+            color: #1a1a1a;
+            border-radius: 50%;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .option-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .option-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: #444;
+            line-height: 1.3;
+        }
+
+        .option-card.selected .option-text {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .hidden-select {
+            display: none;
+        }
+
+        .expandable-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+            margin-top: 15px;
+            padding: 18px;
+            background: #FFFDF5;
+            border: 1.5px solid #F0D78C;
+            border-radius: 8px;
+        }
+
+        .expandable-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dessert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dessert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            border: 1.5px solid #F0D78C;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .dessert-item:hover {
+            border-color: #E5A632;
+            background: #FFF8E7;
+        }
+
+        .dessert-item.selected {
+            border-color: #E5A632;
+            background: #FFF8E7;
+            box-shadow: 0 0 0 2px rgba(229, 166, 50, 0.15);
+        }
+
+        .dessert-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #E5A632;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .dessert-info {
+            flex: 1;
+        }
+
+        .dessert-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+        }
+
+        .dessert-desc {
+            font-size: 11px;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        .info-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: #FFF8E7;
+            border-left: 3px solid #E5A632;
+            border-radius: 0 6px 6px 0;
+            margin-top: 12px;
+        }
+
+        .info-note-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .info-note-text {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .info-note-text strong {
+            color: #1a1a1a;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .star {
+            font-size: 32px;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #E5A632;
+            transform: scale(1.1);
+        }
+
+        .star-rating-label {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 17px;
+            background: #E5A632;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #D49520;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(229, 166, 50, 0.35);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-msg {
+            display: none;
+            text-align: center;
+            padding: 50px 30px;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background: #E5A632;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .success-msg h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .success-msg p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #F0D78C;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #1a1a1a;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            height: 1px;
+            background: #F0D78C;
+            margin: 25px 0;
+        }
+
+        .menu-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .menu-link a {
+            color: #E5A632;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid #E5A632;
+            padding-bottom: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-link a:hover {
+            color: #D49520;
+            border-color: #D49520;
+        }
+
+        @media (max-width: 400px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .card {
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="data:image/png;base64,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" alt="Kimpton Los Monteros" class="logo">
+            <div class="title">Room Service</div>
+            <div class="subtitle">Digital Request</div>
+        </div>
+
+        <div class="body" id="formBody">
+            <form id="recogidaForm">
+
+                <!-- ROOM INFO -->
+                <div class="section-label">Your Room</div>
+                <div class="form-group">
+                    <label for="habitacion">Room Number *</label>
+                    <input type="text" id="habitacion" name="habitacion" placeholder="e.g. 215" required inputmode="numeric" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido">Guest Last Name <span style="font-weight:400;color:#888;">(optional)</span></label>
+                    <input type="text" id="apellido" name="apellido" placeholder="To confirm room number" autocomplete="off">
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- SERVICES -->
+                <div class="section-label">What do you need?</div>
+                <div class="form-group">
+                    <div class="options-grid" id="optionsGrid">
+                        <div class="option-card" data-value="Tray Collection" data-type="toggle">
+                            <span class="option-icon">🍽️</span>
+                            <span class="option-text">Tray Collection</span>
+                        </div>
+                        <div class="option-card" data-value="Dessert" data-type="toggle">
+                            <span class="option-icon">🍰</span>
+                            <span class="option-text">Dessert</span>
+                        </div>
+                        <div class="option-card" data-value="Drink" data-type="toggle">
+                            <span class="option-icon">☕</span>
+                            <span class="option-text">Drink</span>
+                        </div>
+                    </div>
+                    <p class="label-note">You may select multiple options</p>
+                </div>
+
+                <!-- DESSERT SECTION -->
+                <div class="expandable-section" id="dessertSection">
+                    <div class="section-label" style="margin-top:0;">Select Your Dessert</div>
+                    <div class="dessert-list" id="dessertList">
+                        <div class="dessert-item" data-dessert="Payoyo Cheesecake">
+                            <input type="checkbox" name="dessert" value="Payoyo Cheesecake">
+                            <div class="dessert-info">
+                                <div class="dessert-name">Payoyo Cheesecake</div>
+                                <div class="dessert-desc">Payoyo cream cheese baked at a low temperature on a graham cracker crust, topped with mango or berry coulis and garnished with shavings</div>
+                            </div>
+                        </div>
+                        <div class="dessert-item" data-dessert="Dark Chocolate Sphere">
+                            <input type="checkbox" name="dessert" value="Dark Chocolate Sphere">
+                            <div class="dessert-info">
+                                <div class="dessert-name">Dark Chocolate, Hazelnut & Caramel Sphere</div>
+                                <div class="dessert-desc">Dark chocolate mousse with a financier base and hazelnut cream, topped with dark chocolate glaze, served on a bed of cocoa crumble</div>
+                            </div>
+                        </div>
+                        <div class="dessert-item" data-dessert="Seasonal Fruit Platter">
+                            <input type="checkbox" name="dessert" value="Seasonal Fruit Platter">
+                            <div class="dessert-info">
+                                <div class="dessert-name">Seasonal Fruit Platter</div>
+                                <div class="dessert-desc">Fresh selection of seasonal fruits</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-note">
+                        <span class="info-note-icon">📞</span>
+                        <div class="info-note-text">
+                            <strong>We will call you</strong> to confirm your order and delivery time.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DRINK SECTION -->
+                <div class="expandable-section" id="drinkSection">
+                    <div class="section-label" style="margin-top:0;">Your Drink Order</div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label for="drinkNotes">What would you like to drink?</label>
+                        <textarea id="drinkNotes" name="drinkNotes" placeholder="e.g. 2 coffees with skimmed milk, 1 sparkling water, 1 orange juice..."></textarea>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- RATING -->
+                <div class="section-label">Rate Your Service</div>
+                <div class="form-group">
+                    <label>How was your Room Service experience?</label>
+                    <div class="star-rating" id="starRating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <div class="star-rating-label" id="ratingLabel">Tap a star to rate</div>
+                    <input type="hidden" id="rating" name="rating" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="feedback">Your Feedback (optional)</label>
+                    <textarea id="feedback" name="feedback" placeholder="Tell us what you loved or how we can improve..."></textarea>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- GENERAL NOTES -->
+                <div class="section-label">Additional Details</div>
+                <div class="form-group">
+                    <label for="notas">General Notes (optional)</label>
+                    <textarea id="notas" name="notas" placeholder="e.g. Please call before entering, any allergies, special requests..."></textarea>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Send Request</button>
+
+                <div class="menu-link">
+                    <a href="https://kimptonlosmonterosmarbella.stay-app.com/?utm_campaign=anonymous&utm_medium=qr&utm_source=Room&id=9a62e844-a4ef-4714-b265-f33ddd223242" target="_blank">📖 View Full Room Service Menu</a>
+                </div>
+
+                <div class="footer-note">
+                    Your request will be attended to as soon as possible.<br>
+                    Thank you for choosing Kimpton Los Monteros Marbella.
+                </div>
+            </form>
+        </div>
+
+        <div class="success-msg" id="successMsg">
+            <div class="success-icon">✓</div>
+            <h2>Request Sent</h2>
+            <p>Our team has been notified and will attend to your request<br>within the next few minutes.<br><br>Thank you for your patience.</p>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════
+        // CONFIGURATION – Replace with your Google Apps Script Web App URL
+        // ═══════════════════════════════════════════════════════════════════
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKCiQhVsVutykdcJG6LqQMHWSu77XZW9tXSmceharnpXTnASieZdfcwQsC5bamlsl8/exec';
+        // ═══════════════════════════════════════════════════════════════════
+
+        const form = document.getElementById('recogidaForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formBody = document.getElementById('formBody');
+        const successMsg = document.getElementById('successMsg');
+        const optionsGrid = document.getElementById('optionsGrid');
+        const cards = optionsGrid.querySelectorAll('.option-card');
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const ratingLabel = document.getElementById('ratingLabel');
+        const dessertSection = document.getElementById('dessertSection');
+        const drinkSection = document.getElementById('drinkSection');
+        const dessertItems = document.querySelectorAll('.dessert-item');
+
+        const selectedServices = new Set();
+
+        const ratingTexts = {
+            1: 'Poor – We are sorry',
+            2: 'Fair – We can do better',
+            3: 'Good – Thank you',
+            4: 'Very Good – We appreciate it',
+            5: 'Excellent – Outstanding!'
+        };
+
+        // Toggle service cards (multi-select)
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                const value = this.dataset.value;
+
+                if (selectedServices.has(value)) {
+                    selectedServices.delete(value);
+                    this.classList.remove('selected');
+                } else {
+                    selectedServices.add(value);
+                    this.classList.add('selected');
+                }
+
+                // Show/hide dessert section
+                if (selectedServices.has('Dessert')) {
+                    dessertSection.classList.add('active');
+                } else {
+                    dessertSection.classList.remove('active');
+                    // Uncheck all desserts when hidden
+                    dessertItems.forEach(item => {
+                        item.classList.remove('selected');
+                        item.querySelector('input').checked = false;
+                    });
+                }
+
+                // Show/hide drink section
+                if (selectedServices.has('Drink')) {
+                    drinkSection.classList.add('active');
+                } else {
+                    drinkSection.classList.remove('active');
+                    document.getElementById('drinkNotes').value = '';
+                }
+            });
+        });
+
+        // Dessert item selection
+        dessertItems.forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+
+            item.addEventListener('click', function(e) {
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+                this.classList.toggle('selected', checkbox.checked);
+            });
+
+            checkbox.addEventListener('change', function() {
+                item.classList.toggle('selected', this.checked);
+            });
+        });
+
+        // Star rating
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.dataset.value);
+                ratingInput.value = value;
+
+                stars.forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+
+                ratingLabel.textContent = ratingTexts[value];
+                ratingLabel.style.color = '#E5A632';
+            });
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const habitacion = document.getElementById('habitacion').value.trim();
+            const apellido = document.getElementById('apellido').value.trim() || 'Not provided';
+            const notas = document.getElementById('notas').value.trim() || 'None';
+            const rating = ratingInput.value || 'Not rated';
+            const feedback = document.getElementById('feedback').value.trim() || 'None';
+            const drinkNotes = document.getElementById('drinkNotes').value.trim() || 'None';
+
+            if (selectedServices.size === 0) {
+                alert('Please select at least one service (Tray Collection, Dessert, or Drink).');
+                return;
+            }
+
+            // Get selected desserts
+            const selectedDesserts = [];
+            dessertItems.forEach(item => {
+                const cb = item.querySelector('input[type="checkbox"]');
+                if (cb.checked) {
+                    selectedDesserts.push(cb.value);
+                }
+            });
+
+            if (selectedServices.has('Dessert') && selectedDesserts.length === 0) {
+                alert('Please select at least one dessert, or uncheck the Dessert option.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> Sending...';
+
+            const payload = {
+                habitacion: habitacion,
+                apellido: apellido,
+                services: Array.from(selectedServices).join(', '),
+                desserts: selectedDesserts.join(', ') || 'None',
+                drinkNotes: drinkNotes,
+                notas: notas,
+                rating: rating,
+                feedback: feedback,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'no-cors'
+                });
+
+                formBody.style.display = 'none';
+                successMsg.style.display = 'block';
+
+            } catch (error) {
+                alert('There was a problem sending your request. Please try again or call reception.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Send Request';
+            }
+        });
+    </script>
+</body>
+</html>
